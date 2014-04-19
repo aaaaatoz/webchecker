@@ -10,8 +10,8 @@ def getIPByHostname(host):
 
 
 if __name__=='__main__':
-	log = open("checklog.log",'a+')
-	for line in open('hostname.conf'):
+	log = open("/usr/local/webchecker/checklog.log",'a+')
+	for line in open(r'/usr/local/webchecker/hostname.conf'):
 		if line.strip() =="" or line[0] == '#':
 			continue   #pass those are not configuration lines
 		checkinfo = line.strip().split()
