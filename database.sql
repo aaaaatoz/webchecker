@@ -13,3 +13,9 @@ create table DNSRecords
   productionIP varchar(50),
   contingencyIP varchar(50)
   )
+
+ insert into DNSRecords values('www.rms.nsw.gov.au','163.189.7.150','163.189.217.150');
+ insert into DNSRecords values('m.rms.nsw.gov.au','163.189.7.150','163.189.217.150');
+ insert into DNSRecords values('www.myplates.com.au','163.189.7.166','163.189.217.166');
+ insert into DNSRecords values('www.scats.com.au','163.189.7.167','163.189.217.167');
+ insert into DNSRecords values('www.sydneymotorways.com.au','163.189.7.162','163.189.217.162');
