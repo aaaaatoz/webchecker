@@ -16,14 +16,12 @@ def getHOSTfromdb():
         		con.close()
 		return records
 
-def writeDNSrecor(hostname,ip,status):
+def writeDNSrecord(hostname,ip,status):
 	try:
 		con = mdb.connect('localhost', 'webchecker', '', 'monitor');
 		cur = con.cursor()
 		#cur.execute("select * from DNSRecords")
-		print hostname,ip,status
 		insertstring = "insert into DNSchecklog(hostname,ip,status) values('%s','%s' ,'%s')" %(hostname,ip,status)
-		print insertstring
 		cur.execute(insertstring)
 	except mdb.Error, e:
 		print "here"
@@ -58,7 +56,7 @@ if __name__=='__main__':
 			currentIP = "None"
 			status = "none"
 		log.flush()
-		writeDNSrecor(checkinfo[0],currentIP,status)
+		writeDNSrecord(checkinfo[0],currentIP,status)
 	log.close()
 		
 			
