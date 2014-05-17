@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% autoescape on %}
+{% block content %}
+
+{%include "navi.html"%}
+
+
+<form align="center" action="/url">
+  Date to Check:<input type="date" name="day">
+  <input type="submit">
+</form>
+<br />
+<br />
+<table id="result_list" align = "center">
+<thead>
+<tr>
+
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     URL </span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     HTTPCode  </span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     result </span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     ResponseTime</span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     checkedtime </span></div>
+</th>
+
+</tr>
+</thead>
+<tbody>
+
+{%for obj in URLresults%}
+<tr class = "{%cycle row1,row2%}">
+<th>{{obj.url}}</th>
+<th>{{obj.returncode}}</th>
+<th>{{obj.status}}</th>
+<th>{{obj.timeused}}</th>
+<th>{{obj.timestamp}}</th>
+</tr>
+{%endfor%}
+</tbody>
+</table>
+
+
+{% endblock %}
+{% endautoescape %}

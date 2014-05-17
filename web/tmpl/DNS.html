@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% autoescape on %}
+{% block content %}
+
+{%include "navi.html"%}
+
+
+<form align="center" action="/dns">
+  Date to Check:strictly(YYYY-MM-DD)<input type="date" name="day">
+  <select name="dns">
+  <option value="all" selected >all</option>
+  <option value="m.rms.nsw.gov.au">m.rms</option>
+  <option value="myrta.com">myrta</option>
+  <option value="services.rta.nsw.gov.au" >services</option>
+  <option value="www.myplates.com.au">myplates</option>
+  </select>
+  <select name="status">
+  <option value="all" selected >all</option>
+  <option value="production">production</option>
+  <option value="contingency">contingency</option>
+  <option value="other" >other</option>
+  <option value="none" >none</option>
+  </select>
+  <input type="submit">
+</form>
+<br />
+
+<form align="center" action="/checkurl">
+  Click to check now 
+  <input type="submit">
+</form>
+
+<br />
+<table id="result_list" align = "center">
+<thead>
+<tr>
+
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     DNS</span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     IP </span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     STATUS</span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     checkedtime </span></div>
+</th>
+
+</tr>
+</thead>
+<tbody>
+
+{%for obj in DNSresults%}
+<tr class = "{%cycle row1,row2%}">
+<th>{{obj.hostname}}</th>
+<th>{{obj.ip}}</th>
+<th>{{obj.status}}</th>
+<th>{{obj.timestamp}}</th>
+</tr>
+{%endfor%}
+</tbody>
+</table>
+
+
+{% endblock %}
+{% endautoescape %}

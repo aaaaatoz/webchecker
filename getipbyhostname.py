@@ -5,9 +5,9 @@ import sys
 
 def getHOSTfromdb():
 	try:
-		con = mdb.connect('localhost', 'webchecker', '', 'monitor');
+		con = mdb.connect('localhost', 'webchecker', 'rms', 'monitor');
 		cur = con.cursor()
-		cur.execute("select * from DNSRecords")
+		cur.execute("select hostname,productionIP,contingencyIP from DNSRecords")
 		records = cur.fetchall()
 	except mdb.Error, e:
     		sys.exit(1)
@@ -18,13 +18,13 @@ def getHOSTfromdb():
 
 def writeDNSrecord(hostname,ip,status):
 	try:
-		con = mdb.connect('localhost', 'webchecker', '', 'monitor');
+		con = mdb.connect('localhost', 'webchecker', 'rms', 'monitor');
 		cur = con.cursor()
 		#cur.execute("select * from DNSRecords")
 		insertstring = "insert into DNSchecklog(hostname,ip,status) values('%s','%s' ,'%s')" %(hostname,ip,status)
 		cur.execute(insertstring)
+		cur.execute('commit')
 	except mdb.Error, e:
-		print "here"
     		sys.exit(1)
 	finally:
     		if con:

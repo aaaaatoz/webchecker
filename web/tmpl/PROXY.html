@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% autoescape on %} 
+{% block content %}
+
+{%include "navi.html"%}
+
+
+<form align="center" action="/proxy">
+  Date to Check:strictly(YYYY-MM-DD)<input type="date" name="day">
+  <select name="proxy">
+  <option value="all" selected >all</option>
+  <option value="proxy-corp" >proxy-corp</option>
+  <option value="proxy3-corp" >proxy3-corp</option>
+  <option value="proxy4-corp" >proxy4-corp</option>
+  </select>
+  <select name="status">
+  <option value="all" selected >all</option>
+  <option value="hitted">hitted</option>
+  <option value="missing">missing</option>
+  </select>
+  <input type="submit">
+</form>
+<br />
+
+<table id="result_list" align = "center">
+<thead>
+<tr>
+
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     proxy </span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     STATUS</span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     checkedtime </span></div>
+</th>
+
+</tr>
+</thead>
+<tbody>
+
+{%for obj in PROXYresults%}
+<tr class = "{%cycle row1,row2%}"> 
+<th {% ifequal obj.status "missing" %} bgcolor="#FF0000" {% endifequal %} >{{obj.proxyname}}</th>
+<th {% ifequal obj.status "missing" %} bgcolor="#FF0000" {% endifequal %} >{{obj.status}}</th>
+<th {% ifequal obj.status "missing" %} bgcolor="#FF0000" {% endifequal %} >{{obj.timestamp}}</th>
+</tr>
+{%endfor%}
+</tbody>
+</table>
+
+
+{% endblock %}
+{% endautoescape %}

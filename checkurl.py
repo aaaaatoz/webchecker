@@ -6,7 +6,7 @@ import urllib2
 
 def getURLfromdb():
 	try:
-		con = mdb.connect('localhost', 'webchecker', '', 'monitor');
+		con = mdb.connect('localhost', 'webchecker', 'rms', 'monitor');
 		cur = con.cursor()
 		cur.execute("select url,keywords,outagekeyword from URLRecords where checked = true")
 		records = cur.fetchall()
@@ -22,19 +22,24 @@ def getURLstatus(url,keyword,outagekeyword):
 	input: 	url - http URL
 			keyword - the keyword to search
 			outagekeyword - check if the url contains the outage information
+	return httpCode, status and timeused,
 	"""
 	try:
 		httpCode = -1
+		timeused = -1
+		timestamp1 = datetime.datetime.now()
 		conn = urllib2.urlopen(url,timeout=10)
 		httpCode = conn.getcode()
 		if httpCode == 200:
 			response = conn.read()
+			timestamp2 = datetime.datetime.now()
 			if outagekeyword in response:
 				status = 'outage'
 			elif keyword in response:
 				status = 'production'
 			else:
 				status = 'error'
+			timeused = (timestamp2-timestamp1).seconds+(timestamp2-timestamp1).microseconds/1000000.0
 		else:
 			status = "error"
 	except Exception,e:
@@ -42,14 +47,15 @@ def getURLstatus(url,keyword,outagekeyword):
 	finally:
 		if conn:
 			conn.close()
-		return httpCode, status
+		return httpCode, status, timeused
 
-def writeURLrecord(url,httpCode,status):
+def writeURLrecord(url,httpCode,status,timeused):
 	try:
-		con = mdb.connect('localhost', 'webchecker', '', 'monitor');
+		con = mdb.connect('localhost', 'webchecker', 'rms', 'monitor');
 		cur = con.cursor()
-		insertstring = "insert into URLchecklog(url,returncode,status) values('%s','%d' ,'%s')" %(url,httpCode,status)
+		insertstring = "insert into URLchecklog(url,returncode,status,timeused) values('%s','%d' ,'%s','%.6f')" %(url,httpCode,status,timeused)
 		cur.execute(insertstring)
+		cur.execute('commit')
 	except mdb.Error, e:
 		print "here"
 		sys.exit(1)
@@ -60,5 +66,5 @@ def writeURLrecord(url,httpCode,status):
 if __name__=='__main__':
 	records = getURLfromdb()
 	for record in records:
-		httpCode, status = getURLstatus(record[0],record[1],record[2])
-		writeURLrecord(record[0],httpCode,status)
+		httpCode, status, timeused = getURLstatus(record[0],record[1],record[2])
+		writeURLrecord(record[0],httpCode,status,timeused)

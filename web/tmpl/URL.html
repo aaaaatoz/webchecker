@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% autoescape on %}
+{% block content %}
+
+{%include "navi.html"%}
+
+
+<form align="center" action="/url">
+  Date to Check:strictly(YYYY-MM-DD)<input type="date" name="day">
+  <select name="url">
+  <option value="all" selected >all</option>
+  <option value="https://myrta.com/plates/">myplates/plates</option>
+  <option value="http://www.myplates.com.au">myplates</option>
+  <option value="https://myrta.com/myRego/pages/content/olrr/RenewRegistration.page" >myrego</option>
+  <option value="http://www.rms.nsw.gov.au">rms homepage</option>
+  <option value="https://myrta.com/myEToll/">myEToll</option>
+  <option value="https://ols2.rta.nsw.gov.au/is/login.do" >esafety</option>
+  </select>
+  <select name="status">
+  <option value="all" selected >all</option>
+  <option value="outage" >outage</option>
+  <option value="production">production</option>
+  <option value="error" >error</option>
+  </select>
+  <input type="submit">
+</form>
+<br />
+
+<form align="center" action="/checkurl">
+  Click to check now 
+  <input type="submit">
+</form>
+
+<br />
+<table id="result_list" align = "center">
+<thead>
+<tr>
+
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     URL </span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     HTTPCode  </span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     result </span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     ResponseTime</span></div>
+</th>
+<th scope="col"  class="action-checkbox-column">
+   <div class="text"><span>     checkedtime </span></div>
+</th>
+
+</tr>
+</thead>
+<tbody>
+
+{%for obj in URLresults%}
+<tr class = "{%cycle row1,row2%}">
+<th>{{obj.url}}</th>
+<th>{{obj.returncode}}</th>
+<th>{{obj.status}}</th>
+<th>{{obj.timeused}}</th>
+<th>{{obj.timestamp}}</th>
+</tr>
+{%endfor%}
+</tbody>
+</table>
+
+
+{% endblock %}
+{% endautoescape %}
