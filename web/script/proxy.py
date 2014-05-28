@@ -29,7 +29,7 @@ class ProxyProbing(threading.Thread):
 
         def run(self):
                 while True:
-                        if self.counter >= 620:
+                        if self.counter >= 675:
                                 self.counter = 0
                                 self.noProxyProbe()
                         else:
