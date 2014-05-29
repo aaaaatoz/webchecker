@@ -54,10 +54,10 @@
 
 {%for obj in DNSresults%}
 <tr class = "{%cycle row1,row2%}">
-<th>{{obj.hostname}}</th>
-<th>{{obj.ip}}</th>
-<th>{{obj.status}}</th>
-<th>{{obj.timestamp}}</th>
+<th {% ifnotequal obj.status "production" %} bgcolor="#FF0000" {% endifnotequal %}>{{obj.hostname}}</th>
+<th {% ifnotequal obj.status "production" %} bgcolor="#FF0000" {% endifnotequal %}>{{obj.ip}}</th>
+<th {% ifnotequal obj.status "production" %} bgcolor="#FF0000" {% endifnotequal %}>{{obj.status}}</th>
+<th {% ifnotequal obj.status "production" %} bgcolor="#FF0000" {% endifnotequal %}>{{obj.timestamp}}</th>
 </tr>
 {%endfor%}
 </tbody>

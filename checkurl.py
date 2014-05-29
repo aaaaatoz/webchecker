@@ -26,6 +26,7 @@ def getURLstatus(url,keyword,outagekeyword):
 	"""
 	try:
 		httpCode = -1
+		status = 'error'
 		timeused = -1
 		timestamp1 = datetime.datetime.now()
 		conn = urllib2.urlopen(url,timeout=10)

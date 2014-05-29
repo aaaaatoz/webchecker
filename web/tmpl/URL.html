@@ -58,11 +58,11 @@
 
 {%for obj in URLresults%}
 <tr class = "{%cycle row1,row2%}">
-<th>{{obj.url}}</th>
-<th>{{obj.returncode}}</th>
-<th>{{obj.status}}</th>
-<th>{{obj.timeused}}</th>
-<th>{{obj.timestamp}}</th>
+<th {% ifnotequal obj.status "production" %} bgcolor="#FF0000" {% endifnotequal %} >{{obj.url}}</th>
+<th {% ifnotequal obj.status "production" %} bgcolor="#FF0000" {% endifnotequal %} >{{obj.returncode}}</th>
+<th {% ifnotequal obj.status "production" %} bgcolor="#FF0000" {% endifnotequal %}>{{obj.status}}</th>
+<th {% ifnotequal obj.status "production" %} bgcolor="#FF0000" {% endifnotequal %}>{{obj.timeused}}</th>
+<th {% ifnotequal obj.status "production" %} bgcolor="#FF0000" {% endifnotequal %}>{{obj.timestamp}}</th>
 </tr>
 {%endfor%}
 </tbody>
