@@ -6,6 +6,7 @@ from onlineviewer.models import Dnsrecords
 from onlineviewer.models import Dnschecklog
 from onlineviewer.models import Urlrecords
 from onlineviewer.models import Urlchecklog
+from onlineviewer.models import Urlchecklogarchiver
 from onlineviewer.models import Proxychecklog 
 
 from django.contrib.auth.decorators import login_required
@@ -37,6 +38,8 @@ def viewurltests(request):
     starttime,endtime = getmidnight(checkingday)
 
     url= Urlchecklog.objects.all().filter(timestamp__gte=starttime, timestamp__lte=endtime)
+    if len(url) == 0:
+        url= Urlchecklogarchiver.objects.all().filter(timestamp__gte=starttime, timestamp__lte=endtime)   
     if selectstatus <> 'all':
         url = url.filter(status = selectstatus)
 

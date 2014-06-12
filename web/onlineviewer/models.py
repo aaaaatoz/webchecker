@@ -37,6 +37,16 @@ class Urlchecklog(models.Model):
         managed = False
         db_table = 'URLchecklog'
 
+class Urlchecklogarchiver(models.Model):
+    timestamp = models.DateTimeField()
+    url = models.CharField(max_length=200, blank=True)
+    returncode = models.CharField(max_length=10, blank=True)
+    status = models.CharField(max_length=10, blank=True)
+    timeused = models.FloatField(blank=True, null=True)
+    class Meta:
+        managed = False
+        db_table = 'URLchecklogArchiver'
+
 class Proxychecklog(models.Model):
     id = models.IntegerField(primary_key=True)
     timestamp = models.DateTimeField()

@@ -4,6 +4,26 @@ import MySQLdb as mdb
 import boto
 import boto.s3.connection
 
+def moveRecords():
+	try:
+		now=datetime.datetime.now()
+		firstDayOfMonth = "-".join([str(now.year),str(now.month),'01'])
+		con = mdb.connect('localhost', 'webchecker', 'rms', 'monitor');
+		cur = con.cursor()
+		sqlstatement = "set autocommit=0"
+		cur.execute(sqlstatement)
+		sqlstatement = r"insert into URLchecklogArchiver(id,timestamp,url,returncode,status,timeused) select id,timestamp,url,returncode,status,timeused from URLchecklog where timestamp < '"+ firstDayOfMonth+"'"
+		cur.execute(sqlstatement)
+		sqlstatement = "delete from URLchecklog where timestamp < '"+ firstDayOfMonth+"'"
+		cur.execute(sqlstatement)
+		con.commit()
+	except mdb.Error, e:
+		print "Error"
+		sys.exit(1)
+	finally:
+		if con:
+			con.close()
+
 def getURLfromdb():
 	try:
 		con = mdb.connect('localhost', 'webchecker', 'rms', 'monitor');
@@ -69,12 +89,21 @@ def printFormatedURLMonthlyReport(countlist,url):
 	
 if __name__=='__main__':
 	urls = getURLfromdb()
+	now = datetime.datetime.now()
+	if now.month == 0:
+		filename = str(now.year-1) + "-12.html"
+	else:
+		filename = str(now.year) + "-" + str(now.month-1)+ ".html"
 	reportContent = ""
 	for url in urls:
 		countlist = getURLMonthlyReport(url[0])
 		reportContent +=  printFormatedURLMonthlyReport(countlist,url[0])
 	conn = boto.connect_s3()
 	b = conn.get_bucket('rmsmonthlyreports')
-	key = b.new_key('201406.html')
+	key = b.new_key(filename)
 	key.set_contents_from_string(reportContent)
 	key.set_canned_acl('public-read')
+	meta = {"Content-Type":"text/plain"}
+	key.copy(key.bucket,key.name,preserve_acl=True,metadata=meta)
+	#archive the records to archive table
+	moveRecords()
